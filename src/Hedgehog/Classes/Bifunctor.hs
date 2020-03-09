@@ -1,6 +1,9 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE RankNTypes #-}
+#if MIN_VERSION_base(4,12,0)
 {-# LANGUAGE QuantifiedConstraints #-}
+#endif
 
 module Hedgehog.Classes.Bifunctor (bifunctorLaws) where
 
@@ -24,7 +27,7 @@ bifunctorLaws gen = Laws "Bifunctor"
   [ ("Identity", bifunctorIdentity gen)
   , ("First Identity", bifunctorFirstIdentity gen)
   , ("Second Identity", bifunctorSecondIdentity gen)
-  , ("Composition", bifunctorComposition gen) 
+  , ("Composition", bifunctorComposition gen)
   ]
 
 type BifunctorProp f =
@@ -46,9 +49,9 @@ bifunctorIdentity fgen = property $ do
                  [ "bimap id id x" `congruency` "x, where"
                  , "x = " ++ showX
                  ]
-        , lawContextReduced = reduced lhs rhs 
-        } 
-  heqCtx2 lhs rhs ctx 
+        , lawContextReduced = reduced lhs rhs
+        }
+  heqCtx2 lhs rhs ctx
 
 bifunctorFirstIdentity :: forall f. BifunctorProp f
 bifunctorFirstIdentity fgen = property $ do
@@ -63,7 +66,7 @@ bifunctorFirstIdentity fgen = property $ do
               [ "first id x" `congruency` "x, where"
               , "x = " ++ showX
               ]
-        , lawContextReduced = reduced lhs rhs 
+        , lawContextReduced = reduced lhs rhs
         }
   heqCtx2 lhs rhs ctx
 
@@ -80,7 +83,7 @@ bifunctorSecondIdentity fgen = property $ do
               [ "second id x" `congruency` "x, where"
               , "x = " ++ showX
               ]
-        , lawContextReduced = reduced lhs rhs 
+        , lawContextReduced = reduced lhs rhs
         }
   heqCtx2 lhs rhs ctx
 
@@ -97,6 +100,6 @@ bifunctorComposition fgen = property $ do
               [ "bimap id id x" `congruency` "first id . second id $ x, where"
               , "x = " ++ showX
               ]
-        , lawContextReduced = reduced lhs rhs 
-        }       
+        , lawContextReduced = reduced lhs rhs
+        }
   heqCtx2 lhs rhs ctx

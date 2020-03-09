@@ -1,6 +1,8 @@
 {-# LANGUAGE CPP #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+#if MIN_VERSION_base(4,12,0)
 {-# LANGUAGE QuantifiedConstraints #-}
+#endif
 {-# LANGUAGE RankNTypes #-}
 
 #ifndef HAVE_COMONAD

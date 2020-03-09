@@ -1,5 +1,8 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+#if MIN_VERSION_base(4,12,0)
 {-# LANGUAGE QuantifiedConstraints #-}
+#endif
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE LambdaCase #-}
 
@@ -64,8 +67,8 @@ foldableFold fgen = property $ do
               [ "fold a" `congruency` "foldMap id a, where"
               , "a = " ++ showA
               ]
-        , lawContextReduced = reduced lhs rhs 
-        } 
+        , lawContextReduced = reduced lhs rhs
+        }
 
   heqCtx lhs rhs ctx
 
@@ -91,8 +94,8 @@ foldableFoldMap fgen = property $ do
               , "f = " ++ showF
               , "a = " ++ showA
               ]
-        , lawContextReduced = reduced lhs rhs 
-        } 
+        , lawContextReduced = reduced lhs rhs
+        }
   heqCtx lhs rhs ctx
 
 foldableFoldr ::
@@ -120,10 +123,10 @@ foldableFoldr fgen = property $ do
               , "z = " ++ showZ
               , "t = " ++ showT
               ]
-        , lawContextReduced = reduced lhs rhs 
-        } 
+        , lawContextReduced = reduced lhs rhs
+        }
   heqCtx lhs rhs ctx
- 
+
 foldableFoldl ::
   ( Foldable f
   , forall x. Eq x => Eq (f x), forall x. Show x => Show (f x)
@@ -149,8 +152,8 @@ foldableFoldl fgen = property $ do
               , "z = " ++ showZ
               , "t = " ++ showT
               ]
-        , lawContextReduced = reduced lhs rhs 
-        } 
+        , lawContextReduced = reduced lhs rhs
+        }
   heqCtx lhs rhs ctx
 
 ctxNotStrict :: String -> Context
@@ -194,8 +197,8 @@ foldableFoldr' fgen = property $ do
                   , "z0 = " ++ showZ
                   , "t = " ++ showT
                   ]
-            , lawContextReduced = reduced lhs rhs 
-            } 
+            , lawContextReduced = reduced lhs rhs
+            }
           c2 -> c2
         c1 -> c1
   heqCtx lhs rhs ctx
@@ -221,7 +224,7 @@ foldableFoldl' fgen = property $ do
     e <- try (evaluate (Foldable.foldl' f z0 xs))
     case e of
       Left (_ :: ErrorCall) -> pure (Nothing, ctxNotStrict "foldl'")
-      Right i -> pure (Just i, NoContext) 
+      Right i -> pure (Just i, NoContext)
   let ctx = case ctx1 of
         NoContext -> case ctx2 of
           NoContext -> contextualise $ LawContext
@@ -238,12 +241,12 @@ foldableFoldl' fgen = property $ do
                   , "z0 = " ++ showZ
                   , "t = " ++ showT
                   ]
-            , lawContextReduced = reduced lhs rhs 
-            } 
+            , lawContextReduced = reduced lhs rhs
+            }
           c2 -> c2
         c1 -> c1
   heqCtx lhs rhs ctx
- 
+
 foldableFoldl1 ::
   ( Foldable f
   , forall x. Eq x => Eq (f x), forall x. Show x => Show (f x)
@@ -272,7 +275,7 @@ foldableFoldl1 fgen = property $ do
                   , "t = " ++ showT
                   , "x = " ++ showX
                   , "xs = " ++ showXS
-                  ] 
+                  ]
             , lawContextReduced = reduced lhs rhs
             }
       in heqCtx lhs rhs ctx
@@ -329,7 +332,7 @@ foldableToList fgen = property $ do
               , "t = " ++ showT
               ]
         , lawContextReduced = reduced lhs rhs
-        } 
+        }
   heqCtx lhs rhs ctx
 
 foldableNull ::
@@ -351,8 +354,8 @@ foldableNull fgen = property $ do
               , "t = " ++ showT
               ]
         , lawContextReduced = reduced lhs rhs
-        } 
-  heqCtx lhs rhs ctx  
+        }
+  heqCtx lhs rhs ctx
 
 foldableLength ::
   ( Foldable f

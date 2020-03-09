@@ -1,5 +1,8 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE ScopedTypeVariables   #-}
+#if MIN_VERSION_base(4,12,0)
 {-# LANGUAGE QuantifiedConstraints #-}
+#endif
 {-# LANGUAGE RankNTypes            #-}
 
 module Hedgehog.Classes.Alternative (alternativeLaws) where
@@ -10,7 +13,7 @@ import Hedgehog
 import Hedgehog.Classes.Common
 
 -- | Tests the following 'Alternative' laws:
--- 
+--
 -- [__Left Identity__]: @'empty' '<|>' a@ ≡ @a@
 -- [__Right Identity__]: @a '<|>' 'empty'@ ≡ @a@
 -- [__Associativity__]: @a '<|>' (b '<|>' c)@ ≡ @(a '<|>' b) '<|>' c@
@@ -61,7 +64,7 @@ alternativeRightIdentity fgen = property $ do
               ]
         , lawContextReduced = reduced lhs rhs
         }
-  heqCtx1 lhs rhs ctx  
+  heqCtx1 lhs rhs ctx
 
 alternativeAssociativity :: forall f. AlternativeProp f
 alternativeAssociativity fgen = property $ do

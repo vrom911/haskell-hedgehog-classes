@@ -1,5 +1,8 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+#if MIN_VERSION_base(4,12,0)
 {-# LANGUAGE QuantifiedConstraints #-}
+#endif
 {-# LANGUAGE RankNTypes #-}
 
 module Hedgehog.Classes.MonadPlus (monadPlusLaws) where
@@ -130,5 +133,3 @@ monadPlusRightZero fgen = property $ do
               ]
         }
   heqCtx1 lhs rhs ctx
-
-

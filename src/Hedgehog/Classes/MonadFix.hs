@@ -1,6 +1,9 @@
 {-# LANGUAGE BangPatterns #-}
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+#if MIN_VERSION_base(4,12,0)
 {-# LANGUAGE QuantifiedConstraints #-}
+#endif
 {-# LANGUAGE RankNTypes #-}
 
 module Hedgehog.Classes.MonadFix (monadFixLaws) where
@@ -33,7 +36,7 @@ monadFixPurity _ = property $ do
   let h = runQuadraticEquation h'
   let x = mfix (pure . h) :: f Integer
   let y = pure (fix h) :: f Integer
-  x === y  
+  x === y
 
 monadFixLeftShrinking :: forall f. MonadFixProp f
 monadFixLeftShrinking fgen = property $ do
@@ -50,7 +53,7 @@ monadFixSliding _ = property $ do
   let f = pure . runQuadraticEquation f'
   let h !i = let !x = i*i + 7 in x
   let x' = mfix (fmap h . f) :: f Integer
-  let y' = fmap h (mfix (f . h)) :: f Integer 
+  let y' = fmap h (mfix (f . h)) :: f Integer
 
   x' === y'
 
@@ -61,4 +64,3 @@ monadFixNesting _ = property $ do
   let x' = mfix (\x -> mfix (\y -> f x y)) :: f Integer
   let y' = mfix (\x -> f x x) :: f Integer
   x' === y'
-

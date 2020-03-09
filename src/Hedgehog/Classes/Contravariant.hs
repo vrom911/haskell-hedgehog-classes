@@ -1,5 +1,8 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+#if MIN_VERSION_base(4,12,0)
 {-# LANGUAGE QuantifiedConstraints #-}
+#endif
 {-# LANGUAGE RankNTypes #-}
 
 module Hedgehog.Classes.Contravariant (contravariantLaws) where
@@ -67,4 +70,3 @@ contravariantComposition fgen = property $ do
         , lawContextReduced = reduced lhs rhs
         }
   heqCtx1 lhs rhs ctx
-

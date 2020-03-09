@@ -5,7 +5,7 @@
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
-#if HAVE_QUANTIFIED_CONSTRAINTS
+#if MIN_VERSION_base(4,12,0)
 {-# LANGUAGE QuantifiedConstraints #-}
 #endif
 

@@ -1,5 +1,8 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+#if MIN_VERSION_base(4,12,0)
 {-# LANGUAGE QuantifiedConstraints #-}
+#endif
 {-# LANGUAGE RankNTypes #-}
 
 module Hedgehog.Classes.MonadZip (monadZipLaws) where
@@ -46,7 +49,7 @@ monadZipNaturality fgen = property $ do
               [ "fmap (f *** g) (mzip ma mb)" `congruency` "mzip (fmap f ma) (fmap g mb), where"
               , "f = " ++ showF
               , "g = " ++ showG
-              , "ma = " ++ showMA  
+              , "ma = " ++ showMA
               , "mb = " ++ showMB
               ]
         }

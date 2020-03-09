@@ -1,5 +1,8 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+#if MIN_VERSION_base(4,12,0)
 {-# LANGUAGE QuantifiedConstraints #-}
+#endif
 {-# LANGUAGE RankNTypes #-}
 
 module Hedgehog.Classes.Applicative (applicativeLaws) where
@@ -27,7 +30,7 @@ applicativeLaws gen = Laws "Applicative"
   , ("Homomorphism", applicativeHomomorphism gen)
   , ("Interchange", applicativeInterchange gen)
   , ("LiftA2 Part 1", applicativeLiftA2_1 gen)
-  , ("LiftA2 Part 2", applicativeLiftA2_2 gen) 
+  , ("LiftA2 Part 2", applicativeLiftA2_2 gen)
   ]
 
 type ApplicativeProp f =
@@ -158,4 +161,3 @@ applicativeLiftA2_2 fgen = property $ do
         , lawContextReduced = reduced lhs rhs
         }
   heqCtx1 lhs rhs ctx
-

@@ -1,6 +1,9 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE RankNTypes #-}
+#if MIN_VERSION_base(4,12,0)
 {-# LANGUAGE QuantifiedConstraints #-}
+#endif
 
 module Hedgehog.Classes.Bitraversable (bitraversableLaws) where
 
@@ -27,7 +30,7 @@ bitraversableLaws :: forall f.
 bitraversableLaws gen = Laws "Bitraversable"
   [ ("Naturality", bitraversableNaturality gen)
   , ("Identity", bitraversableIdentity gen)
-  , ("Composition", bitraversableComposition gen) 
+  , ("Composition", bitraversableComposition gen)
   ]
 
 type BitraversableProp f =
@@ -50,9 +53,9 @@ bitraversableNaturality fgen = property $ do
                  [ "bitraverse (t . f) (t . g) $ x" `congruency` "t . bitraverse f g $ x, for every applicative transformation t, where"
                  , "x = " ++ showX
                  ]
-        , lawContextReduced = reduced lhs rhs 
+        , lawContextReduced = reduced lhs rhs
         }
-  heqCtx1 lhs rhs ctx  
+  heqCtx1 lhs rhs ctx
 
 bitraversableIdentity :: forall f. BitraversableProp f
 bitraversableIdentity fgen = property $ do
@@ -67,27 +70,27 @@ bitraversableIdentity fgen = property $ do
                  [ "bitraverse Identity Identity x" `congruency` "Identity x, where"
                  , "x = " ++ showX
                  ]
-        , lawContextReduced = reduced lhs rhs 
+        , lawContextReduced = reduced lhs rhs
         }
-  heqCtx1 lhs rhs ctx  
-  
+  heqCtx1 lhs rhs ctx
+
 bitraversableComposition :: forall f. BitraversableProp f
 bitraversableComposition fgen = property $ do
   x <- forAll $ fgen genSmallInteger genSmallInteger
   let f1 = func6; f2 = func5; g1 = func4; g2 = func4
   let lhs :: Compose Triple (Compose Triple (WL.Writer (S.Set Integer))) (f Integer Integer)
       lhs = Compose . fmap (bitraverse g1 g2) . bitraverse f1 f2 $ x
-      
+
   let rhs :: Compose Triple (Compose Triple (WL.Writer (S.Set Integer))) (f Integer Integer)
       rhs = bitraverse (Compose . fmap g1 . f1) (Compose . fmap g2 . f2) x
   let ctx = contextualise $ LawContext
         { lawContextLawName = "Composition", lawContextLawBody = "Compose . fmap (bitraverse g1 g2) . bitraverse f1 f2" `congruency` "bitraverse (Compose . fmap g1 . f1) (Compose . fmap g2 . f2)"
         , lawContextTcName = "Bitraversable", lawContextTcProp =
-            let showX = show x;  
+            let showX = show x;
             in lawWhere
                  [ "Compose . fmap (bitraverse g1 g2) . bitraverse f1 f2 $ x" `congruency` "bitraverse (Compose . fmap g1 . f1) (Compose . fmap g2 . f2) $ x, where"
                  , "x = " ++ showX
                  ]
-        , lawContextReduced = reduced lhs rhs 
+        , lawContextReduced = reduced lhs rhs
         }
   heqCtx1 lhs rhs ctx

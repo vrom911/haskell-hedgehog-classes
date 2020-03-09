@@ -36,7 +36,7 @@ build-type:
 extra-doc-files:
     README.md
   , CHANGELOG.md
-tested-with: GHC == 8.6.5, GHC == 8.8.1
+tested-with: GHC == 8.4.3, GHC == 8.6.5, GHC == 8.8.1
 
 source-repository head
   type:
@@ -135,7 +135,7 @@ library
     Hedgehog.Classes.Storable
     Hedgehog.Classes.Traversable
   build-depends:
-    , base >= 4.12 && < 4.14
+    , base >= 4.11 && < 4.14
     , binary >= 0.8 && < 0.9
     , containers >= 0.5 && < 0.7
     , hedgehog >= 1 && < 1.1

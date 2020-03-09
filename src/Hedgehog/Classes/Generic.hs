@@ -1,8 +1,11 @@
 {-# LANGUAGE AllowAmbiguousTypes #-}
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE RankNTypes #-}
+#if MIN_VERSION_base(4,12,0)
 {-# LANGUAGE QuantifiedConstraints #-}
+#endif
 
 module Hedgehog.Classes.Generic (genericLaws) where
 
@@ -20,11 +23,11 @@ genericLaws ::
   , Eq (Rep a x), Show (Rep a x)
   )
   => Gen a
-  -> Gen (Rep a x) 
+  -> Gen (Rep a x)
   -> Laws
 genericLaws gena genr = Laws "Generic"
   [ ("From-To inverse", fromToInverse gena genr)
-  , ("To-From inverse", toFromInverse gena genr) 
+  , ("To-From inverse", toFromInverse gena genr)
   ]
 
 fromToInverse :: forall a x.
@@ -46,7 +49,7 @@ fromToInverse _gena genr = property $ do
               , "r = " ++ showR
               ]
         , lawContextReduced = reduced lhs rhs
-        } 
+        }
   heqCtx lhs rhs ctx
 
 toFromInverse :: forall a x.
@@ -68,9 +71,9 @@ toFromInverse gena _genr = property $ do
               , "v = " ++ showV
               ]
         , lawContextReduced = reduced lhs rhs
-        } 
+        }
   heqCtx lhs rhs ctx
-       
+
 {-
 type Generic1Prop f =
   ( Generic1 f

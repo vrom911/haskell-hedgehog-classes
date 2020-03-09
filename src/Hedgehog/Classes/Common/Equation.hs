@@ -1,7 +1,9 @@
 {-# LANGUAGE CPP #-}
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE StandaloneDeriving #-}
+#if MIN_VERSION_base(4,12,0)
 {-# LANGUAGE QuantifiedConstraints #-}
+#endif
 {-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE ViewPatterns #-}
 
@@ -74,8 +76,16 @@ genLinearEquation = LinearEquation <$> genSmallInteger <*> genSmallInteger
 #ifdef HAVE_COMONAD
 data LinearEquationW w = LinearEquationW (w LinearEquation) (w LinearEquation)
 
+#if MIN_VERSION_base(4,12,0)
 deriving instance (forall x. Eq x => Eq (w x)) => Eq (LinearEquationW w)
+#else
+deriving instance (Eq1 w) => Eq (LinearEquationW w)
+#endif
+#if MIN_VERSION_base(4,12,0)
 instance (forall x. Show x => Show (w x)) => Show (LinearEquationW w) where
+#else
+instance (Show1 w) => Show (LinearEquationW w) where
+#endif
   show (LinearEquationW a b) = (\f -> f "")
     $ showString "\\x -> if odd x then "
     . showsPrec 0 a
@@ -98,9 +108,17 @@ genLinearEquationW fgen = LinearEquationW
 
 data LinearEquationM m = LinearEquationM (m LinearEquation) (m LinearEquation)
 
+#if MIN_VERSION_base(4,12,0)
 deriving instance (forall x. Eq x => Eq (m x)) => Eq (LinearEquationM m)
+#else
+deriving instance (Eq1 m) => Eq (LinearEquationM m)
+#endif
 
+#if MIN_VERSION_base(4,12,0)
 instance (forall x. Show x => Show (m x)) => Show (LinearEquationM m) where
+#else
+instance (Show1 m) => Show (LinearEquationM m) where
+#endif
   show (LinearEquationM a b) = (\f -> f "")
     $ showString "\\x -> if odd x then "
     . showsPrec 0 a

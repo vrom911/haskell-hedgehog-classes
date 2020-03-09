@@ -1,5 +1,8 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+#if MIN_VERSION_base(4,12,0)
 {-# LANGUAGE QuantifiedConstraints #-}
+#endif
 {-# LANGUAGE RankNTypes #-}
 
 module Hedgehog.Classes.Functor (functorLaws) where
@@ -40,7 +43,7 @@ functorIdentity fgen = property $ do
               , "a = " ++ showA
               ]
         , lawContextReduced = reduced lhs rhs
-        } 
+        }
   heqCtx lhs rhs ctx
 
 functorComposition ::
@@ -49,7 +52,7 @@ functorComposition ::
   ) => (forall x. Gen x -> Gen (f x)) -> Property
 functorComposition fgen = property $ do
   a <- forAll $ fgen genSmallInteger
-  let f = func2; g = func1 
+  let f = func2; g = func1
   let lhs = fmap f (fmap g a)
   let rhs = fmap (f . g) a
   let ctx = contextualise $ LawContext

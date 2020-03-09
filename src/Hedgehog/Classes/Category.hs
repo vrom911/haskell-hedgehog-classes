@@ -1,6 +1,9 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE RankNTypes #-}
+#if MIN_VERSION_base(4,12,0)
 {-# LANGUAGE QuantifiedConstraints #-}
+#endif
 
 module Hedgehog.Classes.Category (categoryLaws, commutativeCategoryLaws) where
 
@@ -63,8 +66,8 @@ categoryAssociativity :: forall f.
   ) => (forall x y. Gen x -> Gen y -> Gen (f x y)) -> Property
 categoryAssociativity fgen = property $ do
   f <- forAll $ fgen genSmallInteger genSmallInteger
-  g <- forAll $ fgen genSmallInteger genSmallInteger 
-  h <- forAll $ fgen genSmallInteger genSmallInteger 
+  g <- forAll $ fgen genSmallInteger genSmallInteger
+  h <- forAll $ fgen genSmallInteger genSmallInteger
   (f . (g . h)) `heq2` ((f . g) . h)
 
 categoryCommutativity :: forall f.

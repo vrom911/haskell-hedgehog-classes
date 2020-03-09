@@ -1,6 +1,9 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE RankNTypes #-}
+#if MIN_VERSION_base(4,12,0)
 {-# LANGUAGE QuantifiedConstraints #-}
+#endif
 
 module Hedgehog.Classes.Arrow (arrowLaws) where
 
@@ -52,14 +55,14 @@ arrowLaw2 _ = property $ do
   g' <- forAll genQuadraticEquation
   let f = runQuadraticEquation f'
       g = runQuadraticEquation g'
-  (arr (f >>> g) :: f Integer Integer) `heq2` (arr f >>> arr g) 
+  (arr (f >>> g) :: f Integer Integer) `heq2` (arr f >>> arr g)
 
 arrowLaw3 :: forall f. ArrowProp f
 arrowLaw3 _ = property $ do
   f' <- forAll genQuadraticEquation
   let f = runQuadraticEquation f'
   let x = first (arr f) :: f (Integer, Integer) (Integer, Integer)
-  let y = arr (first f) :: f (Integer, Integer) (Integer, Integer) 
+  let y = arr (first f) :: f (Integer, Integer) (Integer, Integer)
   x `heq2` y
 
 arrowLaw4 :: forall f. ArrowProp f
@@ -68,22 +71,22 @@ arrowLaw4 fgen = property $ do
   g <- forAll $ fgen genSmallInteger genSmallInteger
   let x = first (f >>> g) :: f (Integer, Integer) (Integer, Integer)
   let y = first f >>> first g :: f (Integer, Integer) (Integer, Integer)
-  x `heq2` y 
+  x `heq2` y
 
 arrowLaw5 :: forall f. ArrowProp f
 arrowLaw5 fgen = property $ do
   f <- forAll $ fgen genSmallInteger genSmallInteger
   let x = first f >>> arr fst :: f (Integer, Integer) Integer
   let y = arr fst >>> f :: f (Integer, Integer) Integer
-  x `heq2` y 
+  x `heq2` y
 
 arrowLaw6 :: forall f. ArrowProp f
 arrowLaw6 fgen = property $ do
   f <- forAll $ fgen genSmallInteger genSmallInteger
   g' <- forAll genQuadraticEquation
   let g = runQuadraticEquation g'
-  let x = ((first f) >>> (arr (Prelude.id *** g))) :: f (Integer, Integer) (Integer, Integer) 
-  let y = arr (id *** g) >>> first f :: f (Integer, Integer) (Integer, Integer) 
+  let x = ((first f) >>> (arr (Prelude.id *** g))) :: f (Integer, Integer) (Integer, Integer)
+  let y = arr (id *** g) >>> first f :: f (Integer, Integer) (Integer, Integer)
   x `heq2` y
 
 arrowLaw7 :: forall f. ArrowProp f
@@ -93,4 +96,3 @@ arrowLaw7 fgen = property $ do
   let x = first (first f) >>> arr assoc :: f ((Integer, Integer), Integer) (Integer, (Integer, Integer))
   let y = arr assoc >>> first f :: f ((Integer, Integer), Integer) (Integer, (Integer, Integer))
   x `heq2` y
-

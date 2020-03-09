@@ -2,9 +2,14 @@
     ConstraintKinds
   , KindSignatures
   , ImpredicativeTypes
-  , QuantifiedConstraints
   , RankNTypes
   #-}
+
+{-# LANGUAGE CPP #-}
+
+#if MIN_VERSION_base(4,12,0)
+{-# LANGUAGE QuantifiedConstraints #-}
+#endif
 
 module Hedgehog.Classes.Common.Types
   ( Ctx

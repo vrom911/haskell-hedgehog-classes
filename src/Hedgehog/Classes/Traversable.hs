@@ -1,5 +1,8 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+#if MIN_VERSION_base(4,12,0)
 {-# LANGUAGE QuantifiedConstraints #-}
+#endif
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE LambdaCase #-}
 
@@ -54,7 +57,7 @@ traversableIdentity fgen = property $ do
 
 traversableComposition :: TraversableProp f
 traversableComposition fgen = property $ do
-  t <- forAll $ fgen genSmallInteger 
+  t <- forAll $ fgen genSmallInteger
   let lhs = (traverse (Compose . fmap func5 . func6) t)
   let rhs = (Compose (fmap (traverse func5) (traverse func6 t)))
   lhs `heq1` rhs
@@ -63,7 +66,7 @@ traversableSequenceNaturality :: TraversableProp f
 traversableSequenceNaturality fgen = property $ do
   x <- forAll $ fgen (genCompose genSmallInteger genTriple (genTuple genSetInteger))
   let a = fmap toSpecialApplicative x
-  (apTrans (sequenceA a)) `heq1` (sequenceA (fmap apTrans a)) 
+  (apTrans (sequenceA a)) `heq1` (sequenceA (fmap apTrans a))
 
 traversableSequenceIdentity :: TraversableProp f
 traversableSequenceIdentity fgen = property $ do
@@ -79,10 +82,9 @@ traversableSequenceComposition fgen = property $ do
 traversableFoldMap :: TraversableProp f
 traversableFoldMap fgen = property $ do
   t <- forAll $ fgen genSmallInteger
-  foldMap func3 t `heq1` foldMapDefault func3 t  
+  foldMap func3 t `heq1` foldMapDefault func3 t
 
 traversableFmap :: TraversableProp f
 traversableFmap fgen = property $ do
   t <- forAll $ fgen genSmallInteger
   fmap func3 t `heq1` fmapDefault func3 t
-

@@ -1,6 +1,9 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE RankNTypes #-}
+#if MIN_VERSION_base(4,12,0)
 {-# LANGUAGE QuantifiedConstraints #-}
+#endif
 
 module Hedgehog.Classes.Bifoldable (bifoldableLaws, bifoldableFunctorLaws) where
 
@@ -163,4 +166,3 @@ bifoldableFunctorFoldMap fgen = property $ do
         , lawContextReduced = reduced lhs rhs
         }
   heqCtx lhs rhs ctx
-
